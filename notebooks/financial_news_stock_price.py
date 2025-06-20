@@ -1,12 +1,4 @@
 #!/usr/bin/env python
-# coding: utf-8
-
-# <a href="https://colab.research.google.com/github/enoch20142009/stock-market/blob/main/notebooks/financial_news_stock_price.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
-
-# # Import Packages
-
-# In[ ]:
-
 
 # IMPORTS
 import numpy as np
@@ -20,11 +12,14 @@ import yfinance as yf
 import time
 from datetime import date
 
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from src.audit_logging import init_audit_table, log_audit, get_audit_log, reset_audit_table
 
-# # Ingest Datasets
-
-# In[ ]:
-
+# # Ingest Datasets and set up SQL Database for audit log
+DB_PATH = 'database/stock_audit.db'
+init_audit_table(db_path=DB_PATH)
 
 # Extract AAPL, MSFT, TSLA price information from yfinance
 tickers = ['AAPL', 'MSFT', 'TSLA']
@@ -35,10 +30,7 @@ stock_df = stock_df.stack(level=1).reset_index().rename(columns={"level_1": "tic
 log_audit('stock_df', 'Read in stock_df from yfinance package', stock_df)
 
 #Save the DataFrame to a CSV file for reproducibility
-stock_df.to_csv("stock_df.csv", index=False)
-
-
-# In[ ]:
+stock_df.to_csv("data/stock_df.csv", index=False)
 
 
 # Read in financial news dataset
@@ -66,11 +58,7 @@ news_df = news_df[filter]
 # Log the stock DataFrame
 log_audit('news_df', 'Read in news_df from raw JSON file', news_df)
 
-
 # # Data Hygiene work
-
-# In[ ]:
-
 
 # Ensure no missing values/invalid values and set up audit trail to track for deleted rows, remove neutral sentiment
 news_df = news_df.dropna()
@@ -83,9 +71,6 @@ stock_df = stock_df[filter]
 log_audit('stock_df', 'Remove all NaN value and invalid values (if any)', stock_df)
 
 
-# In[ ]:
-
-
 # Ensure the consistency of date format in stock_df
 stock_df['Date'] = pd.to_datetime(stock_df['Date'])
 
@@ -95,10 +80,6 @@ news_df['Date'] = news_df['published_utc'].dt.date
 news_df.drop('published_utc', axis=1, inplace=True)
 news_df['Date'] = pd.to_datetime(news_df['Date'])
 log_audit('news_df', 'Add Date column from published_utc to match the date format of stock_df', news_df)
-
-
-# In[ ]:
-
 
 # Drop duplicate just in case of multiple entries and only keep the first news for the day for simplicity
 stock_df = stock_df.drop_duplicates(subset=['Date', 'Ticker'])
@@ -110,9 +91,6 @@ log_audit('news_df', 'Remove duplicate rows (if any) to just keep one news for e
 
 # # Dataset Integration
 
-# In[ ]:
-
-
 # Merge the two dataset
 merged_df = pd.merge(news_df, stock_df, how='inner', left_on=['ticker', 'Date'], right_on=['Ticker', 'Date'])
 
@@ -122,5 +100,5 @@ merged_df.drop('ticker', axis=1, inplace=True)
 log_audit('merged_df', 'Create merged_df by merging stock_df and news_df, also create a column daily_diff to capture daily price movement', merged_df)
 
 # Export the merged dataset into csv
-merged_df.to_csv("merged_dataset.csv", index=False)
+merged_df.to_csv("data/merged_dataset.csv", index=False)
 

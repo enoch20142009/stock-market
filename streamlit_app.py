@@ -27,9 +27,9 @@ audit_log_df = load_audit_log()
 st.title("📊 Stock Sentiment Analysis Dashboard")
 
 st.sidebar.header("Filter Options")
-selected_ticker = st.sidebar.selectbox("Select Ticker", merged_df['ticker'].unique())
+selected_ticker = st.sidebar.selectbox("Select Ticker", merged_df['Ticker'].unique())
 
-subset = merged_df[merged_df['ticker'] == selected_ticker]
+subset = merged_df[merged_df['Ticker'] == selected_ticker]
 
 st.header(f"Analysis for {selected_ticker}")
 
