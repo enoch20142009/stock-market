@@ -1,7 +1,7 @@
-📊 Financial News Analysis Dashboard
+# 📊 Financial News Analysis Dashboard
 This project explores the relationship between financial news sentiment and stock price movements by consolidating multiple datasets into a single, interactive dashboard. It demonstrates data hygiene, structured workflows, and audit trail logging — key skills aligned with data engineering and insight-driven decision making.
 
-✅ Features
+# ✅ Features
 📑 Multi-source Data Integration: Combines financial news (JSON) with stock prices (via yfinance).
 
 🧹 Data Cleaning & Validation: Handles duplicate removal, format normalization, and validation checks.
