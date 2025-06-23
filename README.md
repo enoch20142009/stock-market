@@ -12,29 +12,3 @@ This project explores the relationship between financial news sentiment and stoc
 
 💾 Audit Trail Viewer: Real-time, downloadable audit logs directly within the dashboard.
 
-📂 Project Structure
-stock_sentiment_analysis/
-├── data/                  # Raw and processed datasets
-├── database/              # SQLite database for audit logs
-├── notebooks/             # Jupyter or converted scripts for development
-├── src/                   # Modular code (audit logging, preprocessing)
-├── streamlit_app.py       # Main dashboard application
-├── run_all.sh             # Automation script for preprocessing + dashboard
-├── requirements.txt
-└── README.md
-
-🚀 How to Run Locally
-# Clone this repository
-git clone https://github.com/yourusername/stock_sentiment_analysis.git
-cd stock_sentiment_analysis
-
-# (Optional) Create virtual environment
-python -m venv venv
-source venv/bin/activate  # Or .\venv\Scripts\activate on Windows
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the pipeline and dashboard
-bash run_all.sh
-
